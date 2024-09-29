@@ -1,10 +1,24 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
-
-const port = 3000;
+const createDb = require("./db/db");
+const userRouter = require("./router/index");
 
 const app = express();
+const port = process.env.PORT || 3550;
 
-// controlles פונקציות של הבאקנד
-// router נתיבים של הראוטר
+app.use(express.json());
+app.use(cors());
+
+//routes
+app.use("/users", userRouter);
+
+const startServer = async () => {
+  // Connect to MongoDB
+  await createDb();
+
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+};
+
+startServer();
